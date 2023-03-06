@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<robot name="iiwa_setup" xmlns:xacro="http://www.ros.org/wiki/xacro">
+   <!-- Import Rviz colors -->
+   <xacro:include filename="$(find lbr_iiwa_description)/urdf/materials.xacro" />
+   <!--Import the lbr iiwa macro -->
+   <xacro:include filename="$(find lbr_iiwa_description)/urdf/lbr_iiwa.xacro"/>
+   <!-- Import Gazebo plugins -->
+   <xacro:include filename="$(find lbr_iiwa_description)/gazebo/gazebo.urdf.xacro"/>
+   <!-- Include Utilities -->
+   <xacro:include filename="$(find lbr_iiwa_description)/urdf/utilities.xacro" />
+
+
+   <!-- Fix robot to world-->
+   <link name="world"/>
+
+   <!--lbr -->
+   <xacro:lbr_iiwa name="lbr_iiwa" hardware_interface="" parent="world">
+    <origin xyz="0 0 0.0" rpy="0 0 0" />
+   </xacro:lbr_iiwa>
+   
+    <xacro:property name="x_w" value="0"/>
+	<xacro:property name="y_w" value="0"/>
+	<xacro:property name="z_w" value="0"/>
+	<xacro:property name="roll_w" value="0.0"/>
+	<xacro:property name="pitch_w" value="0.0"/>
+	<xacro:property name="yaw_w" value="0.0"/>
+
+	<!-- combined scene -->
+	<link name="tool_frame"/>
+
+	<joint name="tool_frame_joint" type="fixed">
+		<origin xyz="${x_w} ${y_w} ${z_w}" rpy="${roll_w} ${pitch_w} ${yaw_w}"/>
+		<parent link="lbr_iiwa_link_7"/>
+		<child link="tool_frame"/>
+	</joint>
+    
+
+
+</robot>

@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<robot name="flexfellow" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Import all Gazebo-customization elements, including Gazebo colors -->
+  <xacro:include filename="$(find lbr_iiwa_description)/urdf/lbr_iiwa.gazebo.xacro" />
+  <!-- Import Transmissions -->
+  <xacro:include filename="$(find lbr_iiwa_description)/urdf/lbr_iiwa.transmission.xacro" />
+  <!-- Include Utilities -->
+  <xacro:include filename="$(find lbr_iiwa_description)/urdf/utilities.xacro" />
+
+  <xacro:macro name="flexfellow" params="parent *origin">
+<!-- flexfellow -->
+<!-- top -->
+  <link name="top">
+      <visual>
+        <insert_block name="origin"/>
+        <geometry>
+          <mesh filename="package://lbr_iiwa_description/meshes/top_mesh.stl" scale=".001 .001 .001"/>
+        </geometry>
+        <material name="Black"/>
+      </visual>
+  </link>
+ 
+  <joint name="top" type="fixed">
+	  <parent link="${parent}"/>
+	  <child link="top"/>
+	  <insert_block name="origin"/>
+  </joint>
+
+<!-- body -->
+  <link name="body">
+      <visual>
+        <insert_block name="origin"/>
+        <geometry>
+          <mesh filename="package://lbr_iiwa_description/meshes/body_mesh.stl" scale=".001 .001 .001"/>
+        </geometry>
+        <material name="Beige"/>
+      </visual>
+  </link>
+ 
+  <joint name="body" type="fixed">
+	  <parent link="${parent}"/>
+	  <child link="body"/>
+	  <insert_block name="origin"/>
+  </joint>
+
+<!-- floor -->
+  <link name="floor">
+      <visual>
+        <insert_block name="origin"/>
+        <geometry>
+          <mesh filename="package://lbr_iiwa_description/meshes/floor_mesh.stl" scale=".001 .001 .001"/>
+        </geometry>
+        <material name="Black"/>
+      </visual>
+  </link>
+ 
+  <joint name="floor" type="fixed">
+	  <parent link="${parent}"/>
+	  <child link="floor"/>
+	  <insert_block name="origin"/>
+  </joint>
+
+<!-- front -->
+  <link name="front">
+      <visual>
+        <insert_block name="origin"/>
+        <geometry>
+          <mesh filename="package://lbr_iiwa_description/meshes/front_mesh.stl" scale=".001 .001 .001"/>
+        </geometry>
+        <material name="Orange"/>
+      </visual>
+  </link>
+ 
+  <joint name="front" type="fixed">
+	  <parent link="${parent}"/>
+	  <child link="front"/>
+	  <insert_block name="origin"/>
+  </joint>
+  
+<!-- pole -->
+  <link name="pole">
+      <visual>
+        <insert_block name="origin"/>
+        <geometry>
+          <mesh filename="package://lbr_iiwa_description/meshes/light_pole_mesh.stl" scale=".001 .001 .001"/>
+        </geometry>
+        <material name="Bright Grey"/>
+      </visual>
+  </link>
+ 
+  <joint name="pole" type="fixed">
+	  <parent link="${parent}"/>
+	  <child link="pole"/>
+	  <insert_block name="origin"/>
+  </joint>
+
+
+  </xacro:macro>
+  
+</robot>

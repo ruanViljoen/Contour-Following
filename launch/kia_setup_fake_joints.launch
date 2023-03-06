@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="xacro_file" default="kia_setup.urdf.xacro"/>
+  <arg name="with_xacro" default="true"/>
+  <arg name="rviz_file" default="kia_setup.rviz" />
+  <arg name="with_rviz" default="true"/>
+  <arg name="with_gui" default="true"/>
+  <arg name="js_pub" default="true"/>
+
+  <!-- Standard upload -->
+  <group if="$(arg with_xacro)">
+    <param name="robot_description" command="$(find xacro)/xacro.py --inorder '$(find planar_contour_following)/robot_description/urdf/dual_iiwa/$(arg xacro_file)'"/>
+  </group>
+
+  <!-- Start robot state publisher nodes -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+  <!-- Start rviz node -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find planar_contour_following)/robot_description/environment_config.rviz"/>
+
+
+  <!-- joint state publisher node -->
+  <group if="$(arg js_pub)">
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" >
+        <param name="use_gui" value="$(arg with_gui)" />
+    </node>
+  </group>
+
+
+</launch>

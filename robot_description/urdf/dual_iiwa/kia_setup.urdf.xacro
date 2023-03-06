@@ -1,0 +1,190 @@
+<?xml version="1.0"?>
+<robot name="two_arms" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!--  Configuration properties   -->
+
+    <!-- Create the world link -->
+    <!-- The world frame concides with the bottom center of the torso  -->
+    <link name="world" />
+
+    <link name="world_left" />
+
+    <joint name="world_left_joint" type="fixed">
+      <!-- Calibration with Fede -->
+      <!-- <origin xyz="0.00425911 0.00130823 -0.0066479" rpy="${-0.0008} ${-0.0050} ${-0.01565}"/> -->
+      <!-- 9th March -->
+      <!-- <origin xyz="0.008659 0.012155 -0.0106208" rpy="${0.0046714} ${-0.0103363} ${-0.0179148}"/> -->
+      <!-- 10th March -->
+      <!-- <origin xyz="-0.0092469 0.0233883 -0.0021766" rpy="${0.01540014} ${0.005644} ${-0.0144132}"/> -->
+      <!-- Pickit 10th March -->
+      <!-- <origin xyz="0.0001637 0.02336629 -0.005245" rpy="${0.0117911} ${0.000623} ${-0.0153726}"/> -->
+      <!-- <origin xyz="0.000197056 -0.0235992 0.005524" rpy="${-0.011799} ${-0.00044219} ${0.0153788}"/> -->
+      <!-- <origin xyz="0.0001637 0.02336629 -0.005245" rpy="${0.0117911} ${0.000623} ${-0.0153726}"/> -->
+      <!-- Calibration with Pickit -->
+      <!-- <origin xyz="0.00 -0.00519 -0.01034" rpy="${-0.0001735} ${-0.0024621} ${0.00172}"/> -->
+      <!-- Calibration Lander -->
+      <!-- <origin xyz="-0.02165132 -0.0432277 0.0049708" rpy="${0.01553728} ${0.01805164} ${-0.02646349}"/> -->
+      <!-- Calibration Cristian -->
+      <origin xyz="-0.021587 0.032 0.0041" rpy="${0.01560} ${0.01805164} ${-0.026560}"/>
+      <!-- <origin xyz="0.0 0.0 0.0" rpy="${0.0} ${0.0} ${0.0}"/> -->
+      <parent link="world"/>
+      <child link="world_left"/>
+    </joint>
+
+    <!-- ************ ROBOT AND BASE **********     -->
+    <!-- Create the torso link -->
+    <joint name="iiwa1_torso_joint" type="fixed">
+      <origin xyz="0 0 1.33118" rpy="0 0 -1.5708"/>
+      <parent link="world"/>
+      <child link="iiwa1_torso_link"/>
+    </joint>
+
+    <link name="iiwa1_torso_link">
+      <visual>
+        <origin xyz="0 0 0.0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://planar_contour_following/robot_description/meshes/torso.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="Gold"/>
+      </visual>
+    </link>
+
+    <joint name="iiwa2_torso_joint" type="fixed">
+        <parent link="world_left"/>
+        <origin xyz="0 0 1.33118" rpy="0 0 -1.5708"/>
+        <child link="iiwa2_torso_link"/>
+    </joint>
+
+    <link name="iiwa2_torso_link">
+    </link>
+
+    <!-- Add iiwa14 model -->
+    <xacro:include filename="$(find lbr_iiwa_description)/urdf/materials.xacro" />
+    <xacro:include filename="$(find planar_contour_following)/robot_description/urdf/dual_iiwa/iiwa14.xacro" />
+    <!--<xacro:include filename="$(find planar_contour_following)/robot_description/urdf/dual_iiwa/flexfellow.xacro" /> -->
+
+    <!-- Define iiwa14-world transformation -->
+    <xacro:iiwa14 robot_name="iiwa1" parent="iiwa1_torso_link" hardware_interface="PositionJointInterface">
+        <origin xyz="0.11127 0.0 -0.07513" rpy="0.785398 0.0  1.5708"/>
+    </xacro:iiwa14>
+    <xacro:iiwa14 robot_name="iiwa2" parent="iiwa2_torso_link" hardware_interface="PositionJointInterface">
+        <origin xyz="-0.11127 0.0 -0.07513" rpy="-0.785398 0.0  1.5708"/>
+    </xacro:iiwa14>
+    <!--<xacro:flexfellow parent="world_left"> -->
+    <!--    <origin xyz="0.0 0.0 0.454" rpy="0.0 0.0 0.0"/> -->
+    <!--</xacro:flexfellow> -->
+
+
+    <!-- FT sensor right -->
+  	<!-- <link name="ft_sensor_frame_right"/> -->
+  	<joint name="ft_sensor_joint_right" type="fixed">
+  		<origin xyz="0 0 ${0.01 + 0.025/2}" rpy="${0} ${3.1416} ${-3.1416/4}"/>
+  		<parent link="iiwa1_link_ee_pneumatic"/>
+  		<child link="ft_sensor_frame_right"/>
+  	</joint>
+
+    <link name="ft_sensor_frame_right" >
+    <visual>
+      <geometry>
+        <mesh filename="package://planar_contour_following/robot_description/meshes/load_cell_67.stl" scale=".001 .001 .001"/>
+      </geometry>
+      <material name="Blue">
+        <color rgba="0 0 0.3 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://planar_contour_following/robot_description/meshes/load_cell_67.stl" scale=".001 .001 .001"/>
+      </geometry>
+    </collision>
+    </link>
+
+    <!-- FT sensor left -->
+  	<link name="ft_sensor_frame_left"/>
+  	<joint name="ft_sensor_joint_left" type="fixed">
+  		<origin xyz="0 0 ${0.01 + 0.025/2}" rpy="${0} ${3.1416} ${-3.1416/4}"/>
+  		<parent link="iiwa2_link_ee_pneumatic"/>
+  		<child link="ft_sensor_frame_left"/>
+  	</joint>
+
+    <!-- Small FT sensor left -->
+  	<!-- <link name="ft_sensor_frame_left"/>
+  	<joint name="ft_sensor_joint_left" type="fixed">
+  		<origin xyz="0 0 ${0.01 + 0.0315/2}" rpy="${0} ${3.1416} ${-3.1416/4}"/>
+  		<parent link="iiwa2_link_ee_pneumatic"/>
+  		<child link="ft_sensor_frame_left"/>
+  	</joint> -->
+
+    <!-- tool -->
+  	<joint name="tool_joint" type="fixed">
+  		<origin xyz="0 0 ${-0.025/2}" rpy="${0} ${0} ${0}"/>
+  		<parent link="ft_sensor_frame_right"/>
+  		<child link="tool_link"/>
+  	</joint>
+
+    <link name="tool_link" >
+    <visual>
+      <geometry>
+        <mesh filename="package://planar_contour_following/robot_description/meshes/tool_short.stl" scale=".001 .001 .001"/>
+      </geometry>
+      <material name="gray">
+        <color rgba="0.4 0.4 0.4 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://planar_contour_following/robot_description/meshes/tool_short.stl" scale=".001 .001 .001"/>
+      </geometry>
+    </collision>
+    </link>
+
+    <!-- tcp -->
+
+  	<link name="tcp_link"/>
+  	<joint name="tcp_joint" type="fixed">
+      <!--origin xyz="${-0.0028} ${0.0037} ${-0.1577}" rpy="${0} ${3.1416} ${-3.1416/4}"/> -->
+  		<!-- <origin xyz="0 0 ${-0.151}" rpy="${0} ${3.1416} ${-3.1416/4}"/> for short tool without ASA -->
+  		<origin xyz="0 0 ${-0.151}" rpy="0 0 0"/>
+      <!-- <origin xyz="0 0 ${-0.286}" rpy="${0} ${3.1416} ${-3.1416/4}"/> for long tool -->
+  		<parent link="tool_link"/>
+  		<child link="tcp_link"/>
+  	</joint>
+
+    <!-- ************ TABLE **********     -->
+    <link name="table_link">
+        <visual>
+            <origin xyz="0 0 0.0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="package://planar_contour_following/robot_description/meshes/table.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="White"/>
+        </visual>
+    </link>
+
+    <joint name="table_joint" type="fixed">
+        <parent link="world"/>
+        <origin xyz="0.7 0 0" rpy="1.5708 0 1.5708"/>
+        <child link="table_link"/>
+    </joint>
+
+
+    <link name="connection_link">
+        <visual>
+            <origin xyz="0 0 0.0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="package://planar_contour_following/robot_description/meshes/connection-ee-sensor.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        <material name="gray">
+        <color rgba="0.4 0.4 0.4 1"/>
+        </material>
+        </visual>
+    </link>
+
+    <joint name="connection_joint" type="fixed">
+        <parent link="ft_sensor_frame_right"/>
+        <origin xyz="0 0 ${0.025/2}" rpy="0 0 0"/>
+        <child link="connection_link"/>
+    </joint>
+
+
+
+</robot>

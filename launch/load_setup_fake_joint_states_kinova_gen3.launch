@@ -1,0 +1,21 @@
+<!-- <?xml version="1.0"?> -->
+<launch>
+  <!-- For UR10 robot: -->
+  <!-- <param name="robot_description" command="$(find xacro)/xacro '$(find planar_contour_following)/robot_description/urdf/use_case_setup.urdf.xacro'" /> -->
+  <!-- For Kinova Gen3 robot: -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find planar_contour_following)/robot_description/urdf/kinova/use_case_setup_gen3.urdf.xacro'" />
+
+  <!-- <param name="robot_description" command="$(find xacro)/xacro '$(find planar_contour_following)/robot_description/urdf/kinova/use_case_setup_gen3.urdf.xacro'" /> -->
+  <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+  <!-- In case your ROS version is old, replace the 3 commands that are above with the ones that are commented below-->
+  <!-- <param name="robot_description" command="$(find xacro)/xacro.py '$(find planar_contour_following)/robot_description/urdf/kinova/use_case_setup_gen3.urdf.xacro'" /> -->
+  <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" >
+    <param name="use_gui" value="true"/>
+  </node> -->
+  <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" /> -->
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find planar_contour_following)/robot_description/environment_config.rviz"/>
+
+</launch>

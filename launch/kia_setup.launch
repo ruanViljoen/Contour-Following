@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="xacro_file" default="kia_setup.urdf.xacro"/>
+  <arg name="with_xacro" default="true"/>
+  <arg name="rviz_file" default="kia_setup.rviz" />
+  <arg name="with_rviz" default="true"/>cd 
+  <arg name="with_gui" default="true"/>
+  <arg name="js_pub" default="false"/>
+
+  <!-- Standard upload -->
+  <group if="$(arg with_xacro)">
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find planar_contour_following)/robot_description/urdf/dual_iiwa/$(arg xacro_file)'"/>
+  </group>
+
+  <!-- Start robot state publisher nodes -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+  <node name="static_tf_brdc_pickit_robot" type="static_transform_publisher" args="0 0 0 0 0 0 world pickit/robot_base" pkg="tf2_ros" />
+  <node name="static_tf_brdc_pickit_robot_world" type="static_transform_publisher" args="0 0 0 0 0 0 world pickit/robot_world" pkg="tf2_ros" />
+  <node name="static_tf_brdc_pickit_world" type="static_transform_publisher" args="0 0 0 0 0 0 world pickit/world" pkg="tf2_ros" />
+  <!-- Start rviz node -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find planar_contour_following)/robot_description/environment_config.rviz"/>
+
+  <!-- <node name="static_tf_brdc_pickit_world" type="static_transform_publisher" args="0 0 0 0 0 0 world pickit/reference" pkg="tf2_ros" /> -->
+
+  <!-- joint state publisher node -->
+  <group if="$(arg js_pub)">
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" >
+        <param name="use_gui" value="$(arg with_gui)" />
+    </node>
+  </group>
+
+
+</launch>

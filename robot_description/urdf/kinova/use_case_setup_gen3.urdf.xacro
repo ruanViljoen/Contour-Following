@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="kinova_scene" >
+	<!-- robot -->
+	<xacro:include filename="$(find kortex_description)/robots/gen3_robotiq_2f_85.xacro"/>
+
+	<!-- environment -->
+	<xacro:include filename="$(find planar_contour_following)/robot_description/urdf/environment.urdf.xacro"/>
+
+	<!-- <property name="pi" value="3.14159265" /> -->
+	<xacro:property name="x_w" value="0"/>
+	<xacro:property name="y_w" value="0"/>
+	<xacro:property name="z_w" value="0"/>
+	<xacro:property name="roll_w" value="0.0"/>
+	<xacro:property name="pitch_w" value="0.0"/>
+	<xacro:property name="yaw_w" value="0.0"/>
+
+
+	<!-- combined scene -->
+	<link name="world"/>
+
+	<!-- <xacro:gen3_robotiq_2f_85 parent="base_link">
+		<origin xyz="${x_w} ${y_w} ${z_w}" rpy="${roll_w} ${pitch_w} ${yaw_w}"/>
+	</xacro:gen3_robotiq_2f_85> -->
+	<joint name="world_baselink" type="fixed">
+		<origin xyz="${x_w} ${y_w} ${z_w}" rpy="${roll_w} ${pitch_w} ${yaw_w}"/>
+		<parent link="world"/>
+		<child link="base_link"/>
+	</joint>
+
+	<xacro:table name="table" parent="world" height="0.765">
+		<origin xyz="${x_w} ${y_w} ${z_w}" rpy="${roll_w} ${pitch_w} ${yaw_w}"/>
+	</xacro:table>
+
+</robot>

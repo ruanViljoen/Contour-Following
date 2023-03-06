@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<robot name="dana_hub" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="dana_hub" params="name parent *origin">
+        <joint name="${parent}_${name}_joint_trans_x" type="floating">
+            <insert_block name="origin"/>
+            <limit effort="100" lower="-2.0" upper="2.0" velocity="1" />
+            <parent link="${parent}"/>
+            <child link="${name}_link"/>
+        </joint>
+
+        <link name="${name}_link">
+            <visual>
+                <origin xyz="0 0 0.0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://planar_contour_following/robot_description/meshes/dana_hub.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+                <material name="Soft Grey"/>
+            </visual>
+            <collision>
+                <origin xyz="0 -0.018 0.126" rpy="0 0 0" />
+                <geometry>
+                    <box size="0.11 0.125 0.36" />
+                </geometry>
+                <material name="Grey"/>
+            </collision>
+        </link>
+
+        <link name="${name}_hole1">
+        </link>
+
+        <joint name="${name}_joint1" type="fixed">
+            <origin xyz="0.0 -0.08175 -0.04" rpy="0.0 0.0 0.0"/>
+            <parent link="${name}_link"/>
+            <child link="${name}_hole1"/>
+        </joint>
+
+        <link name="${name}_hole2">
+        </link>
+
+        <joint name="${name}_joint2" type="fixed">
+            <origin xyz="0.0 -0.12675 -0.04" rpy="0.0 0.0 0.0"/>
+            <parent link="${name}_link"/>
+            <child link="${name}_hole2"/>
+        </joint>
+
+        <link name="${name}_hole3">
+        </link>
+
+        <joint name="${name}_joint3" type="fixed">
+            <origin xyz="0.0 -0.17175 -0.04" rpy="0.0 0.0 0.0"/>
+            <parent link="${name}_link"/>
+            <child link="${name}_hole3"/>
+        </joint>
+
+        <link name="${name}_hole4">
+        </link>
+
+        <joint name="${name}_joint4" type="fixed">
+            <origin xyz="0.0 -0.21675 -0.04" rpy="0.0 0.0 0.0"/>
+            <parent link="${name}_link"/>
+            <child link="${name}_hole4"/>
+        </joint>
+
+        <link name="${name}_hole5">
+        </link>
+
+        <joint name="${name}_joint5" type="fixed">
+            <origin xyz="0.0 -0.26175 -0.04" rpy="0.0 0.0 0.0"/>
+            <parent link="${name}_link"/>
+            <child link="${name}_hole5"/>
+        </joint>
+
+
+        <xacro:property name="prepick_distance" value="${0.035+0.1-0.285}" />
+
+        <link name="${name}_approach1"> </link>
+        <joint name="${name}_approach_joint1" type="fixed">
+            <origin xyz="0.0 0.0 ${prepick_distance}" rpy="0.0 0.0 0.0"/>
+            <parent link="${name}_hole1"/>
+            <child link="${name}_approach1"/>
+        </joint>
+
+        <link name="${name}_approach2"> </link>
+        <joint name="${name}_approach_joint2" type="fixed">
+            <origin xyz="0.0 0.0 ${prepick_distance}" rpy="0.0 0.0 0.0"/>
+            <parent link="${name}_hole2"/>
+            <child link="${name}_approach2"/>
+        </joint>
+
+        <link name="${name}_approach3"> </link>
+        <joint name="${name}_approach_joint3" type="fixed">
+            <origin xyz="0.0 0.0 ${prepick_distance}" rpy="0.0 0.0 0.0"/>
+            <parent link="${name}_hole3"/>
+            <child link="${name}_approach3"/>
+        </joint>
+        <link name="${name}_approach4"> </link>
+        <joint name="${name}_approach_joint4" type="fixed">
+            <origin xyz="0.0 0.0 ${prepick_distance}" rpy="0.0 0.0 0.0"/>
+            <parent link="${name}_hole4"/>
+            <child link="${name}_approach4"/>
+        </joint>
+        <link name="${name}_approach5"> </link>
+        <joint name="${name}_approach_joint5" type="fixed">
+            <origin xyz="0.0 0.0 ${prepick_distance}" rpy="0.0 0.0 0.0"/>
+            <parent link="${name}_hole5"/>
+            <child link="${name}_approach5"/>
+        </joint>
+
+    </xacro:macro>
+
+</robot>

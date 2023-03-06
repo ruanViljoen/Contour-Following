@@ -1,0 +1,183 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro"
+       name="robot" >
+
+  <!-- ur5 -->
+<!--   <xacro:include filename="$(find ur_description)/urdf/ur5.urdf.xacro" /> -->
+  <xacro:include filename="$(find ur_description)/urdf/ur10.urdf.xacro" />
+
+<xacro:macro name="robot" params="parent *origin">
+  <joint name="robot_base_joint" type="fixed">
+    <xacro:insert_block name="origin" />
+    <parent link="${parent}"/>
+    <child link="base_link" />
+  </joint>
+
+  <!-- arm -->
+<!--   <xacro:ur5_robot prefix="" joint_limited="true"/> -->
+  <xacro:ur10_robot prefix="" joint_limited="false"/>
+
+  <!-- adaptor -->
+  <joint name="adaptor_joint" type="fixed">
+    <parent link="tool0"/>
+    <child link="adaptor_link"/>
+    <origin xyz="0.0 0 0.005" rpy="0 0 ${-pi/2}"/>
+  </joint>
+
+  <link name="adaptor_link" >
+    <visual>
+      <geometry>
+        <mesh filename="package://planar_contour_following/robot_description/meshes/adaptor.stl" scale=".001 .001 .001"/>
+      </geometry>
+      <material name="Dark_Grey">
+        <color rgba="0.4 0.4 0.4 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://planar_contour_following/robot_description/meshes/adaptor.stl" scale=".001 .001 .001"/>
+      </geometry>
+    </collision>
+  </link>
+
+
+  <!-- load cell -->
+  <joint name="load_cell_joint" type="fixed">
+    <parent link="adaptor_link"/>
+    <child link="load_cell_link"/>
+    <origin xyz="0 0 ${0.005+0.0125}" rpy="${pi} 0 ${-pi/4}"/>
+  </joint>
+
+  <link name="load_cell_link" >
+    <visual>
+      <geometry>
+        <mesh filename="package://planar_contour_following/robot_description/meshes/load_cell_67.stl" scale=".001 .001 .001"/>
+      </geometry>
+      <material name="Blue">
+        <color rgba="0 0 0.3 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://planar_contour_following/robot_description/meshes/load_cell_67.stl" scale=".001 .001 .001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- tool -->
+  <joint name="tool_joint" type="fixed">
+    <origin xyz="0 0 ${-0.025/2}" rpy="${0} ${0} ${0}"/>
+    <parent link="load_cell_link"/>
+    <child link="tool_link"/>
+  </joint>
+
+  <link name="tool_link" >
+  <visual>
+    <geometry>
+      <mesh filename="package://planar_contour_following/robot_description/meshes/tool_short.stl" scale=".001 .001 .001"/>
+    </geometry>
+    <material name="gray">
+      <color rgba="0.4 0.4 0.4 1"/>
+    </material>
+  </visual>
+  <collision>
+    <geometry>
+      <mesh filename="package://planar_contour_following/robot_description/meshes/tool_short.stl" scale=".001 .001 .001"/>
+    </geometry>
+  </collision>
+  </link>
+
+  <!-- tcp -->
+
+  <link name="tcp_link"/>
+  <joint name="tcp_joint" type="fixed">
+    <!--origin xyz="${-0.0028} ${0.0037} ${-0.1577}" rpy="${0} ${3.1416} ${-3.1416/4}"/> -->
+    <!-- <origin xyz="0 0 ${-0.151}" rpy="${0} ${3.1416} ${-3.1416/4}"/> for short tool without ASA -->
+    <origin xyz="0 0 ${-0.151}" rpy="0 0 0"/>
+    <!-- <origin xyz="0 0 ${-0.286}" rpy="${0} ${3.1416} ${-3.1416/4}"/> for long tool -->
+    <parent link="tool_link"/>
+    <child link="tcp_link"/>
+  </joint>
+
+  <!-- load cell to gripper adapter -->
+  <!-- <joint name="adapter_gripper_joint" type="fixed">
+    <parent link="load_cell_link"/>
+    <child link="adapter_gripper_link"/>
+    <origin xyz="0 0 ${-0.0125}" rpy="${pi/2} 0 0"/>
+  </joint>
+
+  <link name="adapter_gripper_link" >
+    <visual>
+      <geometry>
+        <mesh filename="package://planar_contour_following/robot_description/meshes/gripper-ft_adapter.stl" scale=".001 .001 .001"/>
+      </geometry>
+      <material name="Black">
+        <color rgba="0 0 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://planar_contour_following/robot_description/meshes/gripper-ft_adapter.stl" scale=".001 .001 .001"/>
+      </geometry>
+    </collision>
+  </link> -->
+
+  <!-- gripper -->
+  <!-- <joint name="gripper_joint" type="fixed">
+    <parent link="adapter_gripper_link"/>
+    <child link="gripper_link"/>
+    <origin xyz="0 ${-0.014} 0" rpy="${pi/2} ${pi/4} 0"/>
+  </joint>
+
+  <link name="gripper_link" >
+    <visual>
+      <geometry>
+        <mesh filename="package://planar_contour_following/robot_description/meshes/SCHUNK_EGH_80.stl" scale=".001 .001 .001"/>
+      </geometry>
+      <material name="White">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://planar_contour_following/robot_description/meshes/SCHUNK_EGH_80.stl" scale=".001 .001 .001"/>
+      </geometry>
+    </collision>
+  </link> -->
+
+  <!-- TCP -->
+  <!-- <joint name="TCP_joint" type="fixed">
+    <parent link="gripper_link" />
+    <child link="TCP_frame" />
+    <origin xyz="0 0 ${0.02+0.105+0.02}" rpy="${pi} 0.0 ${pi/2}" />
+  </joint>
+
+  <link name="TCP_frame" /> -->
+
+</xacro:macro>
+
+</robot>
+
+
+<!-- peg -->
+<!-- <joint name="peg_joint" type="fixed">
+  <parent link="load_cell_link"/>
+  <child link="peg_link"/>
+  <origin xyz="0 0 ${-0.1}" rpy="${0} 0 ${0}"/>
+</joint>
+
+<link name="peg_link" >
+  <visual>
+    <geometry>
+      <mesh filename="package://planar_contour_following/robot_description/meshes/SquarePeg.stl" scale=".01 .01 .01"/>
+    </geometry>
+    <material name="Red">
+      <color rgba="0.3 0 0 1"/>
+    </material>
+  </visual>
+  <collision>
+    <geometry>
+      <mesh filename="package://planar_contour_following/robot_description/meshes/SquarePeg.stl" scale=".01 .01 .01"/>
+    </geometry>
+  </collision>
+</link> -->

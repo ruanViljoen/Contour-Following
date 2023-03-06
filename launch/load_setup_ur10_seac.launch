@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Load the setup file -->
+  <include file="$(find planar_contour_following)/launch/load_setup_ur10.launch" />
+
+  <!-- For visualizing transforms -->
+  <node pkg="planar_contour_following" type="tf_viz.py" name="tf_viz"  />
+   <node pkg="planar_contour_following" type="show_obstacle.py" name="show_obstacle"  />
+  <!-- To show the obstacle in rviz -->
+  <!-- <node pkg="planar_contour_following" type="force_simulation.py" name="force_simulation"  /> -->
+
+</launch>

@@ -1,0 +1,6 @@
+*.log
+*.dat
+*.ilua_history
+*.DS_Store
+
+.vscode
